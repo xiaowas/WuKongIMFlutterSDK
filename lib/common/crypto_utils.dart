@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 
-import 'package:x25519/x25519.dart';
+import 'x25519/x25519.dart';
 
 class CryptoUtils {
   static String aesKey = "";

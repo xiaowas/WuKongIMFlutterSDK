@@ -1,8 +1,8 @@
 import 'stub.dart'
 // ignore: uri_does_not_exist
-    if (dart.library.io) 'package:adaptive_number/src/int.dart'
+    if (dart.library.io) 'int.dart'
 // ignore: uri_does_not_exist
-    if (dart.library.html) 'package:adaptive_number/src/int64.dart';
+    if (dart.library.html) 'int64.dart';
 
 abstract class Number {
   static Number zero = Number(0);

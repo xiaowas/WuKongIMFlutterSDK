@@ -27,6 +27,11 @@ class WKConversationManager {
     return await ConversationDB.shared.queryAll();
   }
 
+  Future<int> getAllUnreadCount() async {
+    return ConversationDB.shared.queryAllUnreadCount();
+  }
+
+
   Future<bool> deleteMsg(String channelID, int channelType) async {
     bool result = await ConversationDB.shared.delete(channelID, channelType);
     if (result) {

@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
+import 'package:wukongimfluttersdk/common/logs.dart';
+import 'package:wukongimfluttersdk/db/channel.dart';
 import 'package:wukongimfluttersdk/db/const.dart';
 import 'package:wukongimfluttersdk/entity/channel.dart';
 
@@ -92,6 +94,32 @@ class ConversationDB {
       msg = WKDBConst.serializeCoversation(list[0]);
     }
     return msg;
+  }
+
+  Future<int> queryAllUnreadCount() async {
+    int count = 0;
+    var channels = await ChannelDB.shared.queryWithMuted();
+    var channelIds = [];
+    var sql = "";
+    List<Map<String, Object?>> list;
+    if (channels.isNotEmpty) {
+      for (var channel in channels) {
+        channelIds.add(channel.channelID);
+      }
+      sql =
+          "select SUM(unread_count) count from ${WKDBConst.tableConversation} where channel_id not in (${WKDBConst.getPlaceholders(channelIds.length)})";
+      list = await WKDBHelper.shared.getDB()!.rawQuery(sql, channelIds);
+    } else {
+      sql =
+          "select SUM(unread_count) count from ${WKDBConst.tableConversation}";
+      list = await WKDBHelper.shared.getDB()!.rawQuery(sql);
+    }
+    if (list.isNotEmpty) {
+      dynamic data = list[0];
+      count = WKDBConst.readInt(data, 'count');
+     // Logs.error('总数量$count');
+    }
+    return count;
   }
 
   Future<int> getMaxVersion() async {
